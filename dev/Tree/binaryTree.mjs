@@ -1,58 +1,68 @@
-class BinaryTree {
-  constructor(data, leftTree = null, rightTree = null) {
-    this.data = data;
-    this.leftTree = leftTree;
-    this.rightTree = rightTree;
+class BinaryTree{
+  constructor(data, leftTree = null, rightTree = null){
+      this.data = data;
+      this.leftSubTree = leftTree;
+      this.rightSubTree = rightTree;
   }
 
-  getData() {
-    return this.data;
-  } 
-
-  setData(data) {
-    this.data = data;
+  getData(){
+      return this.data;
   }
 
-  getLeftSubTree() {
-    return this.leftTree;
+  setData(data){
+      this.data = data;
   }
 
-  getRightSubTree() {
-    return this.rightTree;
+  getLeftSubTree(){
+      return this.leftSubTree;
   }
 
-  setLeftSubTree(data) {
-    this.leftTree = data;
-  }
-  
-  setRightSubTree(data) {
-    this.rightTree = data;
+  getRightSubTree(){
+      return this.rightSubTree;
   }
 
-  // 전위 순회
-  preOrderTraversal(tree) {
-    if(tree == null) return ; 
-    console.log(tree.data); 
-    this.preOrderTraversal(tree.getLeftSubTree());
-    this.preOrderTraversal(tree.getRightSubTree());
-  }
-  
-  // 중위 순회
-  inOrderTraversl(tree){
-    if(tree == null) return ; 
-    // 왼쪽 노드부터 방문
-    this.inOrderTraversl(tree.getLeftSubTree());
-    console.log(tree.data);
-    this.inOrderTraversl(tree.getRightSubTree());
+  setLeftSubTree(tree){
+      this.leftSubTree = tree;
   }
 
-  // 후위 순회
-  postOrderTraversal(tree) {
-    if(tree == null) return ; 
+  setRightSubTree(tree){
+      this.rightSubTree = tree;
+  }
 
-    this.postOrderTraversal(tree.getLeftSubTree());
-    this.postOrderTraversal(tree.getRightSubTree());
-    console.log(tree.data);
+  preOrderTraversal(tree){
+      if(tree == null) return;
+
+      console.log(tree.data);
+      this.preOrderTraversal(tree.getLeftSubTree());
+      this.preOrderTraversal(tree.getRightSubTree());
+  }
+
+  inOrderTraversal(tree){
+      if(tree == null) return;
+
+      this.inOrderTraversal(tree.getLeftSubTree());
+      console.log(tree.data);
+      this.inOrderTraversal(tree.getRightSubTree());
+  }
+
+  postOrderTraversal(tree){
+      if(tree == null) return;
+
+      this.postOrderTraversal(tree.getLeftSubTree());
+      this.postOrderTraversal(tree.getRightSubTree());
+      console.log(tree.data);
+  }
+
+  removeLeftSubTree() {
+    let deleteNode = this.getLeftSubTree();
+    this.setLeftSubTree(null);
+    return deleteNode;
+  }
+
+  removeRightSubTree() {
+    let deleteNode = this.getRightSubTree();
+    this.setRightSubTree(null);
+    return deleteNode;
   }
 
 }
