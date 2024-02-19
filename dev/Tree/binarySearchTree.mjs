@@ -113,14 +113,14 @@ class BinarySearchTree{
         // 노드끼리 바꾸는 것보다 노드의 값만 체인지 해주자
         deletingNode.setData(replaceNode.getData());
 
-        // replaceParentNode 의 왼쪽이 대체할 노드라면
+        //replaceParentNode 의 왼쪽이 대체할 노드라면
         if(replaceParentNode.getLeftSubTree() == replaceNode) {
           replaceParentNode.setLeftSubTree(replaceNode.getLeftSubTree());
         }else {
         // 바꾸는 노드의 부모노드는 오른쪽에 바꾼노드의 왼쪽에 있던 노드로 바뀌어야한
           replaceParentNode.setRightSubTree(replaceNode.getLeftSubTree());
         }
-        
+
         deletingNode = replaceNode;
         deletingNode.setData(resultData);
 

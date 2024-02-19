@@ -62,10 +62,10 @@ class BinarySearchTree2 {
   // 제거
   remove(data){
     //모든 노드가 부모노드가 있다고 생각하고 제거하기위해 rootNode의 부모를 만들어준다
-    let tempRootNode = new new BinaryTree(0);
+    let tempRootNode = new BinaryTree(0);
     let parentNode = tempRootNode;
     let currentNode = this.root;
-    let deletingNode = currentNode;
+    let deletingNode = null;
 
     tempRootNode.setRightSubTree(this.root); // 그러고 실제 우리의 루트와 연결해주자~
 
@@ -73,7 +73,7 @@ class BinarySearchTree2 {
     while(currentNode != null && currentNode.getData() != data) {
       parentNode = currentNode;
 
-      if(currentNode.getData() > data ){
+      if(currentNode.getData() > data) {
         currentNode = currentNode.getLeftSubTree();
       } else {
         currentNode = currentNode.getRightSubTree();
@@ -81,48 +81,77 @@ class BinarySearchTree2 {
     }
 
     // 계속 타고 내려갔는데 값이 없어서 null이되고~ 당연히 데이터도 없겠지?
-    if(currentNode == null) return; 
+    if(currentNode == null) return;
 
     deletingNode = currentNode;
 
     // 1.터미널 노드를 없애는경우
     if(deletingNode.getLeftSubTree() == null && deletingNode.getRightSubTree() == null) {
       // 1-1. 부모의 왼쪽에 있을때
-      if(parentNode.getLeftSubTree() == deletingNode) {
-        parentNode.removeLeftSubTree();
+      if(parentNode.getLeftSubTree() == deletingNode){
+        parentNode.removeLeftSubTree()
       // 1-2. 부모의 오른쪽에 있을때
       } else {
         parentNode.removeRightSubTree();
       }
     //2. 자식노드가 하나 있는 경우
-    } else if (deletingNode.getLeftSubTree() == null || deletingNode.getRightSubTree() == null ) {
+    } else if (deletingNode.getLeftSubTree() == null || deletingNode.getRightSubTree()) {
       // 자식노드를 담기위한 변수
-      let tempNode;
+      let deletedNodeChild;
       // 2-1. 왼쪽에 있는경우
       if(deletingNode.getLeftSubTree() != null) {
-        tempNode = deletingNode.getLeftSubTree();
+        deletedNodeChild = deletingNode.getLeftSubTree();
       // 2-2. 오른쪽에 있는 경우
       } else {
-        tempNode = deletingNode.getRightSubTree();
+        deletedNodeChild = deletingNode.getRightSubTree();
       }
       // 부모노드에서 temp랑 연곂되어야한다
       // 부모의 왼쪽 노드가 내가 삭제하려는 노드랑 같으면 
       if(parentNode.getLeftSubTree() == deletingNode) {
-        parentNode.setLeftSubTree(tempNode);
+        parentNode.setLeftSubTree(deletedNodeChild);
       }else {
-        parentNode.setRightSubTree(tempNode);
+        parentNode.setRightSubTree(deletedNodeChild);
       }
     //3. 자식노드가 두개있는 노드를 제거하는 경우 
     } else {
-      // 
+      // 왼쪽 자식노드에서 가장 큰값을 삭제하려는 노드와 바꿔치기할거임(값만)
+      // 먼저 삭제할 노드의 왼쪽을 가리키자
+      let replaceNode = deletingNode.getLeftSubTree();
+      // 삭제할 노드의 부모노드를 가리키자
+      let replaceParentNode = deletingNode;
 
+      // 왼쪽노드뭉탱이들의 가장 큰 값은 맨 오른쪽에 있겠지?
+      // 따라서 오른쪽의 노드가 null이 아닐때 까지 반복문을 돈다
+      while(replaceNode.getRightSubTree() != null){
+        // 하나씩 내려가니까 부모 노드가 밑으로 내려가고 replaceNode는 오른쪽노드 변경
+        replaceParentNode = replaceNode;
+        replaceNode = replaceNode.getRightSubTree();
+      }
 
+      // 위의 반복문을 돌게되면 대체하려는 노드의 값을 알게된다
+      // data의 값만 변경해주기 위해서 제거한 노드의 data를 변수에 담아주고
+      let resultData = deletingNode.getData();
+      // 삭제하는 노드의 값만 변경해주자
+      deletingNode.setData(replaceNode.getData());
+
+      // replaceParentNode에 자식노드를 연결해야한다.
+      if(replaceParentNode.getRightSubTree() == replaceNode) {
+        replaceParentNode.setRightSubTree(replaceNode.getLeftSubTree());
+      } 
+
+      // 삭제하려는 노드를 반환하기 위해서 
+      // deleteNode를 replaceNode로 변경하고
+      deletingNode = replaceNode;
+      // 삭제하는 노드의 값을 위에서 구한 값으로 변경해준다
+      deletingNode.setData(resultData);
+
+      // 그리고 만약 root 노드가 변경된 경우 
+      // 현재 tempRootNode를 이용하고 있기 때문에 
+      if(tempRootNode.getRightSubTree() != this.root) {
+        this.root = tempRootNode.getRightSubTree();
+      }
     }
-
-
-
-
-
+    return deletingNode;
   }
 }
 
@@ -145,3 +174,15 @@ binarySearchTree.insert(35);
 binarySearchTree.insert(37);
 binarySearchTree.root.inOrderTraversal(binarySearchTree.root);
 
+console.log("========== Search 6 ==========");
+console.log(binarySearchTree.select(6));
+
+
+console.log("========== Search 1 ==========");
+console.log(binarySearchTree.select(31));
+
+console.log("========== remove 10 ==========");
+console.log(binarySearchTree.remove(10));
+
+console.log("========== remove 10 ==========");
+console.log(binarySearchTree.remove(10));
