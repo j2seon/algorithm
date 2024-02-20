@@ -77,19 +77,38 @@ class AVLTree{
 
     // 회전하는 노드가 root 노드인지 확인해야한다.
     // root 노드가 회전하는 경우 트리의 root노드를 변경해줘야되기 때문
-    let isRootNode = false; 
+    let isRootNode = false; // 루트노드가 아니라고 가정
     if(targetNode == this.root) {
       isRootNode = true;
     }
     // LL 회전해야하는 상황
-
+    // balance가 음수일때 data가 어디있는지 구분(RL의 경우도 -1이기 때문에 data의 크기를 같이 판단한다)
+    if(balance < -1 && data > targetNode.getRightSubTree().getData()) {
+      targetNode = this.rotateLeft(targetNode); // 회전한후 결과를 다시 저장
     // RR 회전해야하는 상황
-
+    }else if(balance > 1 && data < targetNode.getLeftSubTree().getData()) {
+      targetNode = this.rotateRight(targetNode);
     // LR 회전해야하는 상황
+    }else if(balance > 1 && data > targetNode.getLeftSubTree().getData()) {
+      targetNode.setLeftSubTree(this.rotateLeft(targetNode.getLeftSubTree())); // 타겟노드의 왼쪽자식노드를를 LL회전해주고 타겟노드의 왼쪽 자식을 바뀐노드로 바꿔줌
+      targetNode = this.rotateRight(targetNode); // RR 회전
+      // RL 회전해야하는 상황
+    }else if(balance < -1 && data > targetNode.getRightSubTree().getData()){
+      targetNode.setRightSubTree(this.rotateRight(targetNode.getRightSubTree()));
+      targetNode = this.rotateLeft(targetNode);
+    }
 
-    // RL 회전해야하는 상황
-
-
+    // 만약 루트노드가 변경되었다면 ?
+    if(isRootNode){
+      this.root = targetNode;
+    }
+    return targetNode;
   }
+
+  // 균형을 무너트리는 노드 찾는 함수 
+  getUnBalanceNode() {
+    
+  }
+
 }
 
